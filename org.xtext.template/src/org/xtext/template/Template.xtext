@@ -1,0 +1,64 @@
+grammar org.xtext.template.Template with org.eclipse.xtext.common.Terminals
+
+generate template "http://www.xtext.org/template/Template"
+
+Template:
+	(elements+=Type)*;
+  
+Type:
+   Include | Namespace | Function;
+
+Include:
+	'#include' File;
+
+File:'<' ID '>';	
+	
+Namespace:
+	'using' 'namespace' ID End;
+	
+DataType:
+	'auto' | 'void';
+	
+Loop: 
+	'while' '(' Boolean ')' '{' Statement* '}';	
+	
+Boolean:
+	'!' AccessOperator;
+	
+Return:
+	'return' ID;
+	
+ArgumentList:
+	ID | STRING | INT | ',' ArgumentList;
+	
+FunctionCall:
+	ObjectType | Generic '(' ArgumentList* ')';		
+	
+Generic:
+	ID '<' Generic '>' | ID;
+	
+ObjectType: 
+	ID;
+	
+VarName:
+	ID;	
+
+VarDeclaration:
+	(DataType | ObjectType) VarName;
+	
+VarAssign:
+	VarDeclaration '=' FunctionCall;
+	
+ReturnType:
+	DataType | Generic;
+	
+AccessOperator:
+	ObjectType ('.' | '->') FunctionCall;
+
+Function:
+	ReturnType ID '('')' '{' (Statement | Loop)* '}';
+	
+Statement: 
+ 	(VarDeclaration | VarAssign | FunctionCall | AccessOperator | Return) End;	
+	
+End:';';
