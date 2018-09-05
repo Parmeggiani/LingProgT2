@@ -1,0 +1,21 @@
+#include<common>
+
+using namespace blog;
+
+class Blog
+{
+   string title;
+   vector<Post> posts;
+}
+
+class Post : HasAuthor
+{
+   string title;
+   string content;
+   vector<Comment> comments;
+}
+
+class Comment : HasAuthor
+{
+   string content;
+}
